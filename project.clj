@@ -1,6 +1,6 @@
-(defproject paku "0.1.0-SNAPSHOT"
-  :description "FIXME: write description"
-  :url "http://example.com/FIXME"
+(defproject paku "0.1.0"
+  :description "Collection of reusable components"
+  :url "https://github.com/fmnasution/paku"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0-alpha4"]
