@@ -2,10 +2,9 @@
   (:require
    [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
-   [figwheel-sidecar.repl-api :as figwhel.repl-api]
+   [figwheel-sidecar.repl-api :as figwheel.repl-api]
    [taoensso.timbre :as timbre]
-   [taoensso.encore :as encore]
-   [figwheel-sidecar.repl-api :as figwheel.repl-api]))
+   [taoensso.encore :as encore]))
 
 (defn- delete-files-recursively!
   ([fname silently?]
@@ -42,14 +41,14 @@
     (if started?
       this
       (do (delete-compiled-js! this)
-          (figwhel.repl-api/start-figwheel!
+          (figwheel.repl-api/start-figwheel!
            (dissoc this :fresh? :started?))
           (assoc this :started? true))))
   (stop [{:keys [started?] :as this}]
     (if-not started?
       this
       (do (delete-compiled-js! this)
-          (figwhel.repl-api/stop-figwheel!)
+          (figwheel.repl-api/stop-figwheel!)
           (assoc this :started? false)))))
 
 (defn new-figwheel-server
