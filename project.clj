@@ -4,10 +4,10 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.10.0-alpha4"]
-                 [org.clojure/tools.namespace "0.3.0-alpha4"]
                  [com.stuartsierra/component "0.3.2"]
                  [com.taoensso/timbre "4.10.0"]
-                 [com.taoensso/encore "2.94.0"]]
+                 [com.taoensso/encore "2.94.0"]
+                 [org.clojure/tools.namespace "0.3.0-alpha4"]]
   :source-paths ["src/clj" "src/cljc"]
   :resource-paths ["resources"]
   :profiles {:dev {:source-paths ["src/cljs"]
