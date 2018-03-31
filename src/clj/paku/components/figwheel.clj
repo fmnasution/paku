@@ -2,9 +2,7 @@
   (:require
    [clojure.java.io :as io]
    [com.stuartsierra.component :as component]
-   [figwheel-sidecar.repl-api :as figwheel.repl-api]
-   [taoensso.timbre :as timbre]
-   [taoensso.encore :as encore]))
+   [figwheel-sidecar.repl-api :as figwheel.repl-api]))
 
 (defn- delete-files-recursively!
   ([fname silently?]
