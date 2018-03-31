@@ -37,7 +37,7 @@
       this
       (let [conn (:conn datascript)
             tx-report-ch (or tx-report-ch (async/chan 128))]
-        (datascript/listen! conn ::tx-report (async/put! tx-report-ch))
+        (datascript/listen! conn ::tx-report (partial async/put! tx-report-ch))
         (assoc this
                :tx-report-ch tx-report-ch
                :started? true))))
