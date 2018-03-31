@@ -61,3 +61,7 @@
   ([all-builds figwheel-options fresh?]
    (let [build-ids (into [] (keep :id) all-builds)]
      (new-figwheel-server all-builds figwheel-options fresh? build-ids))))
+
+(defn cljs-repl!
+  []
+  (figwheel.repl-api/cljs-repl))
