@@ -1,4 +1,4 @@
-(defproject paku "0.1.6"
+(defproject paku "0.1.7"
   :description "Collection of reusable components"
   :url "https://github.com/fmnasution/paku"
   :license {:name "Eclipse Public License"
