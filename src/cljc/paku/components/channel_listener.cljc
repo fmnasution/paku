@@ -15,10 +15,13 @@
      (:require-macros
       [cljs.core.async.macros :refer [go-loop]])))
 
+(defprotocol Listenable
+  (listenable-ch [listenable]))
+
 (defn- listen!
-  [{:keys [target target-key callback error-callback] :as this}]
+  [{:keys [target callback error-callback] :as this}]
   (let [stop-ch (async/chan)
-        channel (get target target-key)
+        channel (listenable-ch target)
         chs (conj [channel] stop-ch)
         stopper (fn stop!
                   []
@@ -39,7 +42,7 @@
           (recur))))
     stopper))
 
-(defrecord ChannelListener [target target-key callback error-callback stopper]
+(defrecord ChannelListener [target callback error-callback stopper]
   component/Lifecycle
   (start [{:keys [stopper] :as this}]
     (if (some? stopper)
@@ -53,9 +56,8 @@
           (assoc this :stopper nil)))))
 
 (defn new-channel-listener
-  ([target-key callback error-callback]
-   (map->ChannelListener {:target-key target-key
-                          :callback callback
+  ([callback error-callback]
+   (map->ChannelListener {:callback callback
                           :error-callback error-callback}))
-  ([target-key callback]
-   (new-channel-listener target-key callback nil)))
+  ([callback]
+   (new-channel-listener callback nil)))
