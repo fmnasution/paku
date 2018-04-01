@@ -16,7 +16,7 @@
       [cljs.core.async.macros :refer [go-loop]])))
 
 (defn- listen!
-  [{:keys [target target-key callback error-callback]}]
+  [{:keys [target target-key callback error-callback] :as this}]
   (let [stop-ch (async/chan)
         channel (get target target-key)
         chs (conj [channel] stop-ch)
@@ -28,11 +28,11 @@
             stop? (or (= stop-ch ch) (nil? item))]
         (when-not stop?
           (encore/catching
-           (callback item)
+           (callback this item)
            error1
            (encore/catching
             (if (some? error-callback)
-              (error-callback item error1)
+              (error-callback this item error1)
               (timbre/error error1 "`callback` error:"))
             error2
             (timbre/error error2 "`error-callback` error:")))
