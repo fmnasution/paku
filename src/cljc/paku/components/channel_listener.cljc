@@ -42,22 +42,34 @@
           (recur))))
     stopper))
 
-(defrecord ChannelListener [target callback error-callback stopper]
+(defrecord ChannelListener [target
+                            callback
+                            error-callback
+                            pre-start
+                            post-start
+                            pre-stop
+                            post-stop
+                            stopper]
   component/Lifecycle
-  (start [{:keys [stopper] :as this}]
+  (start [{:keys [pre-start post-start stopper] :as this}]
     (if (some? stopper)
       this
-      (let [stopper (listen! this)]
-        (assoc this :stopper stopper))))
-  (stop [{:keys [stopper] :as this}]
+      (let [pre-start (or pre-start identity)
+            post-start (or post-start identity)
+            this (pre-start this)
+            stopper (listen! this)]
+        (post-start (assoc this :stopper stopper)))))
+  (stop [{:keys [pre-stop post-stop stopper] :as this}]
     (if (nil? stopper)
       this
-      (do (stopper)
-          (assoc this :stopper nil)))))
+      (let [pre-stop (or pre-stop identity)
+            post-stop (or post-stop identity)
+            this (pre-stop this)]
+        (stopper)
+        (post-stop (assoc this :stopper nil))))))
 
 (defn new-channel-listener
-  ([callback error-callback]
-   (map->ChannelListener {:callback callback
-                          :error-callback error-callback}))
+  ([callback option]
+   (map->ChannelListener (assoc option :callback callback)))
   ([callback]
    (new-channel-listener callback nil)))

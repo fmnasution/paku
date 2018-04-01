@@ -5,7 +5,8 @@
    [ring.util.http-response :as ring.response]
    [taoensso.sente :as sente]
    [taoensso.encore :as encore]
-   [paku.components.bidi :as cmps.bd]))
+   [paku.components.bidi :as cmp.bd]
+   [paku.components.channel-listener :as cmp.ch-lst]))
 
 (defrecord WebsocketServer [ring-ajax-get
                             ring-ajax-post
@@ -36,7 +37,10 @@
     (if-not started?
       this
       (do (async/close! recv-ch)
-          (assoc this :started? false)))))
+          (assoc this :started? false))))
+  cmp.ch-lst/Listenable
+  (listenable-ch [this]
+    (:recv-ch this)))
 
 (defn new-websocket-server
   ([web-server-adapter option]
@@ -66,4 +70,4 @@
   [path websocket-server-key]
   (let [routes {path ::ring}
         resources {::ring (partial ring-resource websocket-server-key)}]
-    (cmps.bd/new-route-config routes resources)))
+    (cmp.bd/new-route-config routes resources)))

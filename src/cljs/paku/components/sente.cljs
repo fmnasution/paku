@@ -2,7 +2,8 @@
   (:require
    [cljs.core.async :as async]
    [com.stuartsierra.component :as component]
-   [taoensso.sente :as sente]))
+   [taoensso.sente :as sente]
+   [paku.components.channel-listener :as cmp.ch-lst]))
 
 (defrecord WebsocketClient [chsk
                             recv-ch
@@ -28,7 +29,10 @@
       this
       (do (async/close! recv-ch)
           (sente/chsk-disconnect! chsk)
-          (assoc this :started? false)))))
+          (assoc this :started? false))))
+  cmp.ch-lst/Listenable
+  (listenable-ch [this]
+    (:recv-ch this)))
 
 (defn new-websocket-client
   ([path option]

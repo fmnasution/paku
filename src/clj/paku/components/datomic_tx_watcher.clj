@@ -3,7 +3,8 @@
    [clojure.core.async :as async]
    [com.stuartsierra.component :as component]
    [datomic.api :as datomic]
-   [taoensso.encore :as encore]))
+   [taoensso.encore :as encore]
+   [paku.components.channel-listener :as cmp.ch-lst]))
 
 (defrecord DatomicTxWatcher [datomic tx-report-ch tx-report-queue]
   component/Lifecycle
@@ -27,7 +28,10 @@
       (do (async/close! tx-report-ch)
           (assoc this
                  :tx-report-ch nil
-                 :tx-report-queue nil)))))
+                 :tx-report-queue nil))))
+  cmp.ch-lst/Listenable
+  (listenable-ch [this]
+    (:tx-report-ch this)))
 
 (defn new-datomic-tx-watcher
   ([tx-report-ch]
